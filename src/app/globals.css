@@ -1,0 +1,130 @@
+@import "tailwindcss";
+
+/* 디자인 토큰. 시안(DESIGN.md)의 이름을 그대로 써서 시안 HTML 의 클래스를 옮겨 올 수 있게 한다. */
+@theme {
+  --font-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+
+  --color-surface: #faf9f6;
+  --color-surface-bright: #faf9f6;
+  --color-surface-dim: #dbdad7;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f4f3f0;
+  --color-surface-container: #efeeeb;
+  --color-surface-container-high: #e9e8e5;
+  --color-surface-container-highest: #e3e2df;
+  --color-surface-variant: #e3e2df;
+  --color-on-surface: #1a1c1a;
+  --color-on-surface-variant: #434655;
+  --color-outline-variant: #c4c5d7;
+  --color-primary: #0037b0;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #1d4ed8;
+  --color-on-primary-container: #cad3ff;
+  --color-primary-fixed: #dce1ff;
+  --color-primary-fixed-dim: #b7c4ff;
+  --color-secondary: #565e74;
+  --color-secondary-container: #dae2fd;
+  --color-on-secondary-container: #5c647a;
+  --color-tertiary: #633b04;
+  --color-tertiary-container: #7e521c;
+  --color-error: #ba1a1a;
+  --color-cobalt-electric: #1d4ed8;
+  --color-navy-ink: #0f172a;
+  --color-warm-canvas: #f8f7f4;
+  --color-canvas-subtle: #f1efe9;
+  --color-canvas-card: #ffffff;
+  --color-line-neutral: #e2ded6;
+  --color-accent-amber: #92632b;
+
+  --text-display: 56px;
+  --text-display--line-height: 64px;
+  --text-display--letter-spacing: -0.03em;
+  --text-display--font-weight: 600;
+  --text-display-mobile: 38px;
+  --text-display-mobile--line-height: 44px;
+  --text-display-mobile--letter-spacing: -0.02em;
+  --text-display-mobile--font-weight: 600;
+  --text-headline-lg: 36px;
+  --text-headline-lg--line-height: 42px;
+  --text-headline-lg--letter-spacing: -0.025em;
+  --text-headline-lg--font-weight: 600;
+  --text-headline-lg-mobile: 28px;
+  --text-headline-lg-mobile--line-height: 34px;
+  --text-headline-lg-mobile--letter-spacing: -0.02em;
+  --text-headline-lg-mobile--font-weight: 600;
+  --text-headline-md: 24px;
+  --text-headline-md--line-height: 32px;
+  --text-headline-md--letter-spacing: -0.015em;
+  --text-headline-md--font-weight: 500;
+  --text-headline-sm: 18px;
+  --text-headline-sm--line-height: 26px;
+  --text-headline-sm--letter-spacing: -0.01em;
+  --text-headline-sm--font-weight: 600;
+  --text-body-lg: 16px;
+  --text-body-lg--line-height: 26px;
+  --text-body-lg--letter-spacing: -0.01em;
+  --text-body-md: 14px;
+  --text-body-md--line-height: 22px;
+  --text-body-md--letter-spacing: -0.005em;
+  --text-body-sm: 12px;
+  --text-body-sm--line-height: 18px;
+  --text-spec-num: 13px;
+  --text-spec-num--line-height: 18px;
+  --text-spec-num--letter-spacing: 0.02em;
+  --text-spec-num--font-weight: 600;
+  --text-label-caps: 11px;
+  --text-label-caps--line-height: 16px;
+  --text-label-caps--letter-spacing: 0.06em;
+  --text-label-caps--font-weight: 600;
+
+  --spacing-gutter: 1.5rem;
+  --spacing-space-xs: 0.25rem;
+  --spacing-space-sm: 0.5rem;
+  --spacing-space-md: 1rem;
+  --spacing-space-lg: 1.5rem;
+  --spacing-space-xl: 2.5rem;
+
+  /* 시안은 버튼·입력칸 4px, 카드 8px 로 각을 살린다. */
+  --radius-lg: 0.25rem;
+  --radius-xl: 0.5rem;
+}
+
+/* 페이지 가로 틀: 최대 1280px, 좌우 여백은 모바일 1.25rem · 768px 이상 3rem (DESIGN.md Layout). */
+@utility wrap {
+  width: 100%;
+  max-width: 80rem;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+  @media (width >= 48rem) {
+    padding-inline: 3rem;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 6rem;
+}
+
+body {
+  background: var(--color-surface);
+  color: var(--color-on-surface);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-cobalt-electric);
+  outline-offset: 2px;
+}
+
+dialog::backdrop {
+  background: rgb(15 23 42 / 0.45);
+}
