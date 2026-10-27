@@ -71,7 +71,7 @@ export default function WholesaleForm({ store = "", phone = "" }: { store?: stri
     <form noValidate onSubmit={submit} className="space-y-space-md">
       <div>
         {label("store", "매장 상호명")}
-        <input id="w-store" name="store" defaultValue={store} maxLength={50} autoComplete="organization" placeholder="예: 카페 리듬 성수점" onChange={clear("store")} className={`${field} h-11`} {...a11y("store")} />
+        <input id="w-store" name="store" defaultValue={store} maxLength={50} autoComplete="organization" placeholder="예: 카페 모먼트 성수점" onChange={clear("store")} className={`${field} h-11`} {...a11y("store")} />
         {err("store")}
       </div>
       <div className="grid grid-cols-1 gap-space-md md:grid-cols-2">

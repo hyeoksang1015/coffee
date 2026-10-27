@@ -73,7 +73,7 @@ describe("원두 목록 필터", () => {
 });
 
 describe("B2B 신청서", () => {
-  const ok: Wholesale = { store: "카페 리듬", manager: "홍길동", phone: "010-1234-5678", location: "서울 성동구", status: "현재 매장 운영 중", volume: "10_30kg", profiles: [], message: "" };
+  const ok: Wholesale = { store: "카페 모먼트", manager: "홍길동", phone: "010-1234-5678", location: "서울 성동구", status: "현재 매장 운영 중", volume: "10_30kg", profiles: [], message: "" };
   it("필수 항목만 채우면 통과", () => expect(validateWholesale(ok)).toEqual({}));
   it("빈 칸·잘못된 연락처·목록 밖 값은 오류", () => {
     const e = validateWholesale({ ...ok, store: " ", phone: "abc", volume: "x", profiles: ["<b>"] });

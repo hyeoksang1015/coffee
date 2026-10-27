@@ -41,12 +41,12 @@ export default function Home() {
               <span className="text-label-caps uppercase tracking-wider text-navy-ink">Atelier Vol. 08 • Cupping 90.5+</span>
             </div>
             <h1 className="mb-space-md text-display-mobile text-navy-ink sm:text-display">
-              Find Your Rhythm
+              Find Your Wave
               <br />
               <span className="text-cobalt-electric">in Every Pour.</span>
             </h1>
             <p className="mb-space-lg max-w-xl text-body-lg text-secondary">
-              리듬 커피는 생두의 태생적 질감과 당도를 극대화하는 건축적 로스팅을 지향합니다. 독일 프로밧 12kg 드럼에서 빚어내는 정밀한 열풍 밸런스로 일상의 매 순간 완벽한 컵 노트를 선사합니다.
+              로우웨이브는 생두의 태생적 질감과 당도를 극대화하는 건축적 로스팅을 지향합니다. 독일 프로밧 12kg 드럼에서 빚어내는 정밀한 열풍 밸런스로 일상의 매 순간 완벽한 컵 노트를 선사합니다.
             </p>
             <div className="mb-space-xl flex flex-wrap items-center gap-space-sm">
               <Link href="/beans/" className={`${btnPrimary} group min-h-12 shadow-md`}>
@@ -161,7 +161,7 @@ export default function Home() {
                 <br />
                 100% 재활용 가능한 알루미늄-프리 파우치.
               </h2>
-              <p className="max-w-xl text-body-md leading-relaxed text-on-primary-container/80">리듬 커피는 플라스틱 코팅을 배제한 단일 재질 크라프트 복합막과 단방향 아로마 밸브를 적용합니다. 패키지마다 수확일, 로스팅 타임스탬프, 권장 브루잉 레시피가 각인된 아카이브 카드가 동봉됩니다.</p>
+              <p className="max-w-xl text-body-md leading-relaxed text-on-primary-container/80">로우웨이브는 플라스틱 코팅을 배제한 단일 재질 크라프트 복합막과 단방향 아로마 밸브를 적용합니다. 패키지마다 수확일, 로스팅 타임스탬프, 권장 브루잉 레시피가 각인된 아카이브 카드가 동봉됩니다.</p>
               <dl className="grid grid-cols-2 gap-space-sm pt-space-xs sm:grid-cols-3">
                 {[
                   ["100% Recyclable", "Eco Mono-material"],
@@ -193,7 +193,7 @@ export default function Home() {
       <section className="wrap py-space-xl">
         <div className="mx-auto mb-space-lg max-w-xl text-center">
           <span className="text-label-caps uppercase tracking-wider text-cobalt-electric">Personalized Experience</span>
-          <h2 className="mt-1 text-headline-lg-mobile text-navy-ink md:text-headline-lg">두 가지의 리듬, 맞춤형 가이드</h2>
+          <h2 className="mt-1 text-headline-lg-mobile text-navy-ink md:text-headline-lg">두 가지의 웨이브, 맞춤형 가이드</h2>
         </div>
         <div className="grid grid-cols-1 gap-gutter md:grid-cols-2">
           <TasteQuiz />
@@ -244,7 +244,7 @@ export default function Home() {
                 <div className="mb-space-sm inline-flex items-center gap-1.5 rounded bg-surface-container px-3 py-1 text-label-caps uppercase tracking-wider text-cobalt-electric">
                   <MapPin className="size-3.5" aria-hidden="true" /> Mapo Atelier • Roasting Lab
                 </div>
-                <h2 className="mb-space-xs text-headline-lg-mobile text-navy-ink md:text-headline-lg">리듬 로스터리 랩 &amp; 쇼룸</h2>
+                <h2 className="mb-space-xs text-headline-lg-mobile text-navy-ink md:text-headline-lg">로우웨이브 로스터리 랩 &amp; 쇼룸</h2>
                 <p className="mb-space-md text-body-md leading-relaxed text-secondary">서울 마포구 독막로. 거대한 유리창 너머로 회전하는 프로밧 로스터의 열기와 매일 정오에 진행되는 시음 바를 직접 경험해보세요.</p>
                 <dl className="mb-space-md flex flex-col gap-space-xs rounded-lg bg-surface-container-low p-space-md">
                   {[

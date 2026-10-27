@@ -32,7 +32,7 @@ export default function PurchasePanel({ bean, rating }: { bean: Bean; rating?: {
     <div className="flex w-full flex-col gap-space-lg rounded-xl bg-surface-container-lowest p-space-lg shadow-xl sm:p-space-xl">
       <div>
         <div className="mb-space-xs flex items-center justify-between gap-2">
-          <span className="text-label-caps uppercase tracking-wider text-cobalt-electric">Rhythm {bean.category === "single" ? "Single Origin" : bean.category === "blend" ? "Signature Blend" : "Decaf"}</span>
+          <span className="text-label-caps uppercase tracking-wider text-cobalt-electric">LowWave {bean.category === "single" ? "Single Origin" : bean.category === "blend" ? "Signature Blend" : "Decaf"}</span>
           {rating && (
             <span className="flex items-center gap-1 text-spec-num text-secondary">
               <Star className="size-4 fill-accent-amber text-accent-amber" aria-hidden="true" /> {rating.score} ({rating.count} Reviews)

@@ -4,7 +4,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { addItem, parseCart, removeItem, setQty, type CartItem } from "@/lib/cart";
 
 // 장바구니는 방문자 브라우저(localStorage)에만 둔다. 다른 탭에서 바꿔도 storage 이벤트로 맞춘다.
-const KEY = "rhythm-cart";
+const KEY = "lowwave-cart";
 const EMPTY: CartItem[] = [];
 let items: CartItem[] | null = null;
 const listeners = new Set<() => void>();

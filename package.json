@@ -9,7 +9,8 @@
     "lint": "eslint",
     "test": "vitest run",
     "postbuild": "node scripts/fix-export.mjs",
-    "e2e": "node scripts/e2e.mjs"
+    "e2e": "node scripts/e2e.mjs",
+    "export:webmate": "node scripts/export-webmate.mjs"
   },
   "dependencies": {
     "lucide-react": "^1.62.0",

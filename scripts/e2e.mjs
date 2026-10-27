@@ -155,7 +155,7 @@ try {
   check("Esc → 장바구니 닫힘", !(await s.js(`${CART}.open`)));
   await s.send("Page.reload"); await sleep(1200);
   check("새로고침해도 장바구니 유지", (await s.js(COUNT)) === 1);
-  await s.js("localStorage.setItem('rhythm-cart', JSON.stringify([{ slug: 'x', grams: 1, grind: 'whole', plan: 'once', qty: 1 }, { slug: 'aricha', grams: 200, grind: 'whole', plan: 'once', qty: 999 }]))");
+  await s.js("localStorage.setItem('lowwave-cart', JSON.stringify([{ slug: 'x', grams: 1, grind: 'whole', plan: 'once', qty: 1 }, { slug: 'aricha', grams: 200, grind: 'whole', plan: 'once', qty: 999 }]))");
   await s.send("Page.reload"); await sleep(1200);
   check("저장소의 잘못된 값은 버리고 수량은 20개까지", (await s.js(COUNT)) === 20);
   await s.js("localStorage.clear()");
@@ -197,7 +197,7 @@ try {
   await h.js(click("fieldset button", "핸드드립")); await h.js(click("fieldset button", "화사한 산미")); await h.js(click("fieldset button", "블랙으로")); await sleep(200);
   check("퀴즈 3문항 → 추천 원두", await h.js("!!document.querySelector('[data-testid=quiz-result] a[href^=\"/beans/\"]')"));
   await h.js(click("[data-testid=quiz-result] button", "장바구니 담기")); await sleep(300);
-  check("추천 원두 담기 (핸드드립 → 필터 분쇄)", (await h.js(COUNT)) === 1 && (await h.js("JSON.parse(localStorage.getItem('rhythm-cart'))[0].grind")) === "filter");
+  check("추천 원두 담기 (핸드드립 → 필터 분쇄)", (await h.js(COUNT)) === 1 && (await h.js("JSON.parse(localStorage.getItem('lowwave-cart'))[0].grind")) === "filter");
   await h.js("localStorage.clear()");
   // 커핑 예약
   await h.js(click("button", "목요 퍼블릭 커핑 예약")); await sleep(200);
@@ -228,7 +228,7 @@ try {
   const errs = await b.js("[...document.querySelectorAll('form [aria-invalid=true]')].map(e => e.name)");
   check("빈 신청 → 필수 항목 오류", JSON.stringify(errs) === '["store","manager","phone","location"]', errs.join(","));
   check("첫 오류 칸으로 포커스", (await b.js("document.activeElement?.name")) === "store");
-  await b.js(fill("#w-store", "카페 리듬")); await b.js(fill("#w-manager", "홍길동")); await b.js(fill("#w-phone", "010-1234-5678")); await b.js(fill("#w-location", "서울 성동구"));
+  await b.js(fill("#w-store", "카페 모먼트")); await b.js(fill("#w-manager", "홍길동")); await b.js(fill("#w-phone", "010-1234-5678")); await b.js(fill("#w-location", "서울 성동구"));
   await b.js("document.querySelector('input[value=over_50kg]').click(); document.querySelector('input[name=profiles]').click()");
   await b.js(click("form button[type=submit]")); await sleep(200);
   check("올바른 신청 → 확인 화면", await b.js("document.querySelector('#inquiry [role=status]')?.textContent.includes('50kg 이상') && document.querySelector('#inquiry [role=status]').textContent.includes('다크 초콜릿')"));

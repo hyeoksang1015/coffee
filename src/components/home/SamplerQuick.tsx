@@ -28,14 +28,14 @@ export default function SamplerQuick() {
         </div>
         <span className="text-label-caps uppercase text-cobalt-electric">Wholesale • B2B Partnership</span>
         <h3 className="mt-1 mb-2 text-headline-md text-navy-ink">파트너 카페 웰컴 샘플러 키트</h3>
-        <p className="text-body-md leading-relaxed text-secondary">매장 오픈을 앞두고 있거나 원두 교체를 고민 중이신 대표님께 리듬 커피의 대표 블렌드와 추출 프로파일 카드를 무상으로 보내 드립니다.</p>
+        <p className="text-body-md leading-relaxed text-secondary">매장 오픈을 앞두고 있거나 원두 교체를 고민 중이신 대표님께 로우웨이브의 대표 블렌드와 추출 프로파일 카드를 무상으로 보내 드립니다.</p>
       </div>
       <form noValidate onSubmit={submit} className="mt-space-lg flex flex-col gap-space-xs pt-space-md">
         <div className="flex flex-col gap-2 sm:flex-row">
           <label className="sr-only" htmlFor="quick-store">
             매장 상호명
           </label>
-          <input id="quick-store" name="store" maxLength={50} autoComplete="organization" placeholder="매장 상호명 (예: 카페 리듬)" onChange={() => setError("")} className="h-11 min-w-0 flex-1 rounded-lg bg-surface-container-low px-space-sm text-base text-navy-ink outline-none focus:bg-surface focus:ring-1 focus:ring-cobalt-electric sm:text-body-sm" />
+          <input id="quick-store" name="store" maxLength={50} autoComplete="organization" placeholder="매장 상호명 (예: 카페 모먼트)" onChange={() => setError("")} className="h-11 min-w-0 flex-1 rounded-lg bg-surface-container-low px-space-sm text-base text-navy-ink outline-none focus:bg-surface focus:ring-1 focus:ring-cobalt-electric sm:text-body-sm" />
           <label className="sr-only" htmlFor="quick-phone">
             연락처
           </label>

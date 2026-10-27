@@ -8,7 +8,7 @@ import { won } from "@/data/site";
 import { QUIZ, recommend, type Answers } from "@/lib/quiz";
 import { useCart } from "../CartProvider";
 
-/** 홈 '나만의 커피 리듬 찾기': 세 문항에 답하면 카드 안에서 원두를 추천한다. */
+/** 홈 '나만의 커피 웨이브 찾기': 세 문항에 답하면 카드 안에서 원두를 추천한다. */
 export default function TasteQuiz() {
   const [step, setStep] = useState(-1);
   const [answers, setAnswers] = useState<Partial<Answers>>({});
@@ -28,7 +28,7 @@ export default function TasteQuiz() {
           <Coffee className="size-6" aria-hidden="true" />
         </div>
         <span className="text-label-caps uppercase text-secondary">For Coffee Lovers</span>
-        <h3 className="mt-1 mb-2 text-headline-md text-navy-ink">나만의 커피 리듬 찾기</h3>
+        <h3 className="mt-1 mb-2 text-headline-md text-navy-ink">나만의 커피 웨이브 찾기</h3>
         <p className="text-body-md leading-relaxed text-secondary">평소 즐겨 마시는 추출 도구와 선호하는 산미·바디 밸런스를 고르면 어울리는 원두를 1분 만에 추천해 드립니다.</p>
       </div>
       <div className="mt-space-lg pt-space-md" aria-live="polite">
@@ -65,7 +65,7 @@ export default function TasteQuiz() {
         )}
         {pick && (
           <div className="rounded-lg bg-canvas-card p-space-md shadow-sm" data-testid="quiz-result">
-            <span className="text-label-caps uppercase text-cobalt-electric">Your Rhythm</span>
+            <span className="text-label-caps uppercase text-cobalt-electric">Your Wave</span>
             <div className="mt-2 flex gap-3">
               <Image src={pick.image} alt="" width={80} height={80} className="size-20 shrink-0 rounded-lg object-cover" />
               <div className="min-w-0">

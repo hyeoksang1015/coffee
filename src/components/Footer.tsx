@@ -43,7 +43,7 @@ export default function Footer() {
             <span>사업자등록번호: {site.bizNo}</span>
             <span>통신판매업신고: {site.mailOrderNo}</span>
           </div>
-          <span className="text-spec-num">© 2026 RHYTHM COFFEE ATELIER.</span>
+          <span className="text-spec-num">© 2026 LOWWAVE COFFEE ATELIER.</span>
         </div>
         <p className="mt-space-md text-body-sm text-on-surface-variant">이 사이트는 포트폴리오용 가상 브랜드입니다. 상품·후기·수치는 예시이며 실제 주문과 결제는 이루어지지 않습니다.</p>
       </div>

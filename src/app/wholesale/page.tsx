@@ -23,7 +23,7 @@ const steps = [
 ];
 
 const partners = [
-  { cafe: "아틀리에 한남", vol: "월 45kg 납품 중", text: "로스팅 일관성이 압도적입니다. 계절이나 날씨에 따라 변하던 추출 분쇄도 편차가 리듬의 프로파일 도입 후 현저히 줄었습니다. 손님들의 라떼 칭찬이 확연히 늘었습니다.", name: "김태현 대표 바리스타", where: "서울 용산구 한남동 • 스페셜티 쇼룸", photo: "/images/partner-1.webp" },
+  { cafe: "아틀리에 한남", vol: "월 45kg 납품 중", text: "로스팅 일관성이 압도적입니다. 계절이나 날씨에 따라 변하던 추출 분쇄도 편차가 로우웨이브 프로파일 도입 후 현저히 줄었습니다. 손님들의 라떼 칭찬이 확연히 늘었습니다.", name: "김태현 대표 바리스타", where: "서울 용산구 한남동 • 스페셜티 쇼룸", photo: "/images/partner-1.webp" },
   { cafe: "플로우 커피랩", vol: "월 70kg 납품 중", text: "오픈 초기 머신 영점 세팅 때 직접 방문해 수질과 버 캘리브레이션을 끝내주신 점이 감동이었습니다. 바리스타 교체 시에도 온보딩 가이드북 덕에 맛의 편차가 없습니다.", name: "박지우 총괄 디렉터", where: "서울 마포구 서교동 • 베이커리 & 브루잉 바", photo: "/images/partner-2.webp" },
   { cafe: "모노리스 성수", vol: "월 120kg 납품 중", text: "주간 발주 주기가 유연하고 로스팅 후 48시간 내 도착하는 시스템이 완벽합니다. 디카페인과 시그니처 싱글오리진 라인업의 고객 반응이 뛰어나 재방문율이 35% 올랐습니다.", name: "이서준 오너", where: "서울 성동구 성수동 • 로스터리 카페", photo: "/images/partner-3.webp" },
 ];
@@ -92,7 +92,7 @@ export default function WholesalePage() {
                 <span className="absolute bottom-2 left-2 rounded bg-navy-ink/80 px-space-xs py-0.5 text-body-sm text-on-primary">600g Tasting Pack Included</span>
               </div>
               <ul className="space-y-space-xs text-body-sm text-navy-ink">
-                {["리듬 #1 시그니처 에스프레소 블렌드 (200g)", "리듬 #2 라이트 로스트 플로럴 블렌드 (200g)", "이달의 싱글오리진 큐레이션 원두 (200g)"].map((t) => (
+                {["로우웨이브 #1 시그니처 에스프레소 블렌드 (200g)", "로우웨이브 #2 라이트 로스트 플로럴 블렌드 (200g)", "이달의 싱글오리진 큐레이션 원두 (200g)"].map((t) => (
                   <li key={t} className="flex items-center gap-space-xs">
                     <CheckCircle2 className="size-[18px] shrink-0 text-cobalt-electric" aria-hidden="true" /> {t}
                   </li>
@@ -155,7 +155,7 @@ export default function WholesalePage() {
           <div className="mb-space-xl flex flex-col justify-between md:flex-row md:items-end">
             <div>
               <span className="text-label-caps uppercase tracking-wider text-cobalt-electric">Case Studies &amp; Profiles</span>
-              <h2 className="mt-1 text-headline-lg-mobile text-navy-ink md:text-headline-lg">리듬과 함께하는 파트너 카페 이야기</h2>
+              <h2 className="mt-1 text-headline-lg-mobile text-navy-ink md:text-headline-lg">로우웨이브와 함께하는 파트너 카페 이야기</h2>
             </div>
             <p className="mt-2 max-w-md text-body-md text-on-surface-variant md:mt-0">단순 원두 납품을 넘어 매장의 브랜딩과 고객 만족도를 함께 설계한 파트너 매장의 경험입니다.</p>
           </div>

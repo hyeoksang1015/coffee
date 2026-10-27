@@ -1,4 +1,4 @@
-// 홈 '나만의 커피 리듬 찾기' 퀴즈. 세 가지 답으로 원두 하나를 고른다.
+// 홈 '나만의 커피 웨이브 찾기' 퀴즈. 세 가지 답으로 원두 하나를 고른다.
 import { beans, type Bean } from "@/data/beans";
 
 export const QUIZ = [
