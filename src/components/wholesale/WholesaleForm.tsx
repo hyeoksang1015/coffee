@@ -2,7 +2,9 @@
 
 import { useSearchParams } from "next/navigation";
 import { useState, type FormEvent } from "react";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { ArrowRight, CheckCircle2, ChevronDown, Clock } from "lucide-react";
+import { db, errorMessage } from "@/lib/firebase";
 import { PROFILES, STATUSES, validateWholesale, VOLUMES, type Errors, type Wholesale } from "@/lib/forms";
 import { field } from "../ui";
 
@@ -17,17 +19,28 @@ export function WholesaleFormFromParams() {
 export default function WholesaleForm({ store = "", phone = "" }: { store?: string; phone?: string }) {
   const [errors, setErrors] = useState<Errors<Wholesale>>({});
   const [sent, setSent] = useState<Wholesale | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [failed, setFailed] = useState("");
 
-  function submit(e: FormEvent<HTMLFormElement>) {
+  async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const f = new FormData(e.currentTarget);
-    const v = (k: string) => String(f.get(k) ?? "");
+    const v = (k: string) => String(f.get(k) ?? "").trim();
     const w: Wholesale = { store: v("store"), manager: v("manager"), phone: v("phone"), location: v("location"), status: v("status"), volume: v("volume"), profiles: f.getAll("profiles").map(String), message: v("message") };
     const found = validateWholesale(w);
     setErrors(found);
     const first = Object.keys(found)[0];
     if (first) return e.currentTarget.querySelector<HTMLElement>(`[name="${first}"]`)?.focus();
-    setSent(w);
+    // 접수 내용은 관리자 대시보드(/admin/)의 B2B 문의 탭에 쌓인다.
+    setBusy(true);
+    setFailed("");
+    try {
+      await addDoc(collection(db(), "lwInquiries"), { ...w, handled: false, createdAt: serverTimestamp() });
+      setSent(w);
+    } catch (err) {
+      setFailed(errorMessage(err));
+    }
+    setBusy(false);
   }
 
   const clear = (k: keyof Wholesale) => () => errors[k] && setErrors((x) => ({ ...x, [k]: undefined }));
@@ -48,7 +61,7 @@ export default function WholesaleForm({ store = "", phone = "" }: { store?: stri
     return (
       <div role="status" className="space-y-space-md rounded-xl bg-navy-ink p-space-lg text-on-primary">
         <CheckCircle2 className="size-10 text-primary-fixed-dim" aria-hidden="true" />
-        <h3 className="text-headline-md">{sent.store} 신청 내용을 확인했습니다.</h3>
+        <h3 className="text-headline-md">{sent.store} 신청이 접수되었습니다.</h3>
         <dl className="grid grid-cols-[6rem_1fr] gap-y-1 text-body-md">
           <dt className="text-on-primary/60">담당자</dt>
           <dd>
@@ -59,7 +72,7 @@ export default function WholesaleForm({ store = "", phone = "" }: { store?: stri
           <dt className="text-on-primary/60">선호 프로파일</dt>
           <dd>{sent.profiles.join(", ") || "선택 안 함"}</dd>
         </dl>
-        <p className="text-body-sm text-on-primary/70">포트폴리오용 데모 사이트라 실제로 접수·발송되지는 않습니다.</p>
+        <p className="text-body-sm text-on-primary/70">접수 내용은 관리자 대시보드에서 확인합니다. 포트폴리오용 가상 브랜드라 실제 상담 전화는 드리지 않습니다.</p>
         <button type="button" onClick={() => setSent(null)} className="min-h-11 rounded-lg bg-white/10 px-4 text-body-md font-semibold hover:bg-white/15">
           다시 작성하기
         </button>
@@ -137,8 +150,11 @@ export default function WholesaleForm({ store = "", phone = "" }: { store?: stri
         <textarea id="w-message" name="message" rows={3} maxLength={1000} placeholder="예: 라마르조코 리네아 PB 2그룹 + 말코닉 E65S 사용 중입니다. 라떼 베이스에서 묵직한 바디감을 원합니다." onChange={clear("message")} className={`${field} resize-none py-3`} {...a11y("message")} />
         {err("message")}
       </div>
-      <button type="submit" className="flex min-h-13 w-full items-center justify-center gap-space-sm rounded-lg bg-cobalt-electric py-space-md text-headline-sm text-on-primary shadow-sm transition-colors hover:bg-primary">
-        무료 샘플 &amp; 납품 단가표 신청하기 <ArrowRight className="size-5" aria-hidden="true" />
+      <p role="alert" className="text-body-sm text-error empty:hidden">
+        {failed}
+      </p>
+      <button type="submit" disabled={busy} className="flex min-h-13 w-full items-center justify-center gap-space-sm rounded-lg bg-cobalt-electric py-space-md text-headline-sm text-on-primary shadow-sm transition-colors hover:bg-primary disabled:opacity-60">
+        {busy ? "접수 중…" : "무료 샘플 & 납품 단가표 신청하기"} <ArrowRight className="size-5" aria-hidden="true" />
       </button>
       <p className="flex items-center justify-center gap-1.5 pt-space-xs text-center text-body-sm text-on-surface-variant">
         <Clock className="size-4 shrink-0 text-cobalt-electric" aria-hidden="true" />

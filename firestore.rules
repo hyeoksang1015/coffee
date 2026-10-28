@@ -1,0 +1,64 @@
+rules_version = '2';
+
+// Firebase 콘솔 → Firestore Database → 규칙 탭에 이 내용을 통째로 붙여 넣고 게시한다.
+// FLOWN 과 같은 Firebase 프로젝트를 쓰므로 FLOWN 규칙(users)도 함께 들어 있다.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ── FLOWN (homepage/flown/firestore.rules 와 같다)
+    match /users/{uid} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+      allow create: if request.auth != null && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['name', 'company', 'email', 'plan', 'createdAt'])
+        && request.resource.data.name is string && request.resource.data.name.size() > 0 && request.resource.data.name.size() <= 50
+        && request.resource.data.company is string && request.resource.data.company.size() <= 50
+        && request.resource.data.email == request.auth.token.email
+        && request.resource.data.plan == 'trial'
+        && request.resource.data.createdAt == request.time;
+      allow update, delete: if false;
+    }
+
+    // ── LowWave
+    // 서버 계정: 결제 승인·환불 함수(functions/api)만 쓴다. 관리자: 주문 상태와 송장만 바꾼다.
+    function lwServer() { return request.auth != null && request.auth.uid == '9aGKX8fHubYyEUChlOFDnAzYMmx1'; }
+    function lwAdmin() { return request.auth != null && request.auth.uid in ['pwWrXdUASfX0P4YAtQbNrFGqVIJ2']; }
+    function str(v, max) { return v is string && v.size() > 0 && v.size() <= max; }
+
+    // 주문: 고객은 결제 대기(pending) 주문만 만들 수 있다. 결제 완료는 서버가 토스 승인 후에만 바꾼다.
+    match /lwOrders/{orderId} {
+      allow read: if request.auth != null && (resource.data.uid == request.auth.uid || lwAdmin() || lwServer());
+      allow create: if request.auth != null
+        && request.resource.data.keys().hasOnly(['uid', 'email', 'items', 'orderName', 'amount', 'shipping', 'status', 'createdAt', 'updatedAt'])
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.email == request.auth.token.email
+        && request.resource.data.status == 'pending'
+        && request.resource.data.items is list && request.resource.data.items.size() > 0 && request.resource.data.items.size() <= 30
+        && str(request.resource.data.orderName, 100)
+        && request.resource.data.amount is int && request.resource.data.amount > 0 && request.resource.data.amount <= 10000000
+        && request.resource.data.shipping.keys().hasOnly(['name', 'phone', 'address', 'memo'])
+        && str(request.resource.data.shipping.name, 30) && str(request.resource.data.shipping.phone, 20) && str(request.resource.data.shipping.address, 200)
+        && request.resource.data.shipping.memo is string && request.resource.data.shipping.memo.size() <= 100
+        && request.resource.data.createdAt == request.time && request.resource.data.updatedAt == request.time;
+      allow update: if lwServer()
+        || (lwAdmin()
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'tracking', 'updatedAt'])
+          && request.resource.data.updatedAt == request.time
+          && ((resource.data.status in ['paid', 'preparing', 'shipping', 'delivered'] && request.resource.data.status in ['paid', 'preparing', 'shipping', 'delivered'])
+            || (resource.data.status == 'pending' && request.resource.data.status == 'cancelled')));
+      allow delete: if false;
+    }
+
+    // B2B 납품 문의: 누구나 남길 수 있고, 관리자만 읽고 처리 표시를 바꾼다.
+    match /lwInquiries/{id} {
+      allow create: if request.resource.data.keys().hasOnly(['store', 'manager', 'phone', 'location', 'status', 'volume', 'profiles', 'message', 'handled', 'createdAt'])
+        && str(request.resource.data.store, 50) && str(request.resource.data.manager, 50) && str(request.resource.data.phone, 20) && str(request.resource.data.location, 50)
+        && str(request.resource.data.status, 50) && str(request.resource.data.volume, 20)
+        && request.resource.data.profiles is list && request.resource.data.profiles.size() <= 3
+        && request.resource.data.message is string && request.resource.data.message.size() <= 1000
+        && request.resource.data.handled == false
+        && request.resource.data.createdAt == request.time;
+      allow read: if lwAdmin();
+      allow update: if lwAdmin() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['handled']);
+      allow delete: if false;
+    }
+  }
+}

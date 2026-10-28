@@ -43,7 +43,8 @@ async function connect(wsUrl) {
     if (msg.method === "Log.entryAdded" && msg.params.entry.level === "error") problems.push("log: " + msg.params.entry.text + " " + (msg.params.entry.url ?? ""));
     if (msg.method === "Network.requestWillBeSent") {
       const { url } = msg.params.request;
-      if (!["http://127.0.0.1:4184", "about:", "data:", "blob:", "mailto:"].some((p) => url.startsWith(p))) external.push(url);
+      // Firebase(로그인·DB, 연결 확인용 cleardot.gif)는 실제 백엔드라 허용한다. 그 밖의 외부 요청은 없어야 한다.
+      if (!["http://127.0.0.1:4184", "about:", "data:", "blob:", "mailto:", "https://firestore.googleapis.com/", "https://identitytoolkit.googleapis.com/", "https://securetoken.googleapis.com/", "https://www.google.com/images/cleardot.gif"].some((p) => url.startsWith(p))) external.push(url);
     }
   };
   // 응답이 없으면 무한정 기다리지 않고 어느 단계에서 멈췄는지 알린다.
@@ -100,7 +101,7 @@ const CART = "document.querySelector('dialog[aria-labelledby=cart-title]')";
 try {
   // ── 페이지별 레이아웃
   for (const w of WIDTHS) {
-    for (const url of ["/", "/beans/", "/beans/aricha/", "/beans/tempo/", "/wholesale/"]) {
+    for (const url of ["/", "/beans/", "/beans/aricha/", "/beans/tempo/", "/wholesale/", "/checkout/", "/account/", "/admin/"]) {
       const p = await openPage(w);
       await p.go(url);
       const broken = await p.loadAllImages();
@@ -149,8 +150,7 @@ try {
   check("수량 + → 170,000, 헤더 3", (await s.js(TOTAL)) === "₩170,000" && (await s.js(COUNT)) === 3);
   await s.js(click("dialog li button[aria-label$='빼기']")); await sleep(150);
   check("빼기 → 템포만 남고 배송비 3,000", (await s.js(`${CART}.querySelectorAll('li').length`)) === 1 && (await s.js(TOTAL)) === "₩21,000");
-  await s.js(click("dialog button", "주문하기")); await sleep(150);
-  check("주문하기 → 데모 안내", await s.js("!!document.querySelector('dialog [role=status]')?.textContent.includes('데모')"));
+  check("주문하기 → 주문서(/checkout/) 링크", await s.js("document.querySelector('dialog a[href=\"/checkout/\"]')?.textContent.includes('21,000')"));
   await s.key("Escape"); await sleep(200);
   check("Esc → 장바구니 닫힘", !(await s.js(`${CART}.open`)));
   await s.send("Page.reload"); await sleep(1200);
@@ -230,19 +230,43 @@ try {
   check("첫 오류 칸으로 포커스", (await b.js("document.activeElement?.name")) === "store");
   await b.js(fill("#w-store", "카페 모먼트")); await b.js(fill("#w-manager", "홍길동")); await b.js(fill("#w-phone", "010-1234-5678")); await b.js(fill("#w-location", "서울 성동구"));
   await b.js("document.querySelector('input[value=over_50kg]').click(); document.querySelector('input[name=profiles]').click()");
-  await b.js(click("form button[type=submit]")); await sleep(200);
-  check("올바른 신청 → 확인 화면", await b.js("document.querySelector('#inquiry [role=status]')?.textContent.includes('50kg 이상') && document.querySelector('#inquiry [role=status]').textContent.includes('다크 초콜릿')"));
+  // 실제 DB 에 테스트 문의가 쌓이지 않도록 Firestore 요청은 막고, 저장을 시도하는지만 본다.
+  await b.send("Network.setBlockedURLs", { urls: ["*firestore.googleapis.com*"] });
+  await b.js(click("form button[type=submit]")); await sleep(300);
+  check("올바른 신청 → 저장 요청(접수 중)", await b.js("document.querySelector('#inquiry form button[type=submit]').disabled && document.querySelector('#inquiry form button[type=submit]').textContent.includes('접수 중')"));
+  await b.send("Network.setBlockedURLs", { urls: [] });
   await b.js(click("details summary")); await sleep(150);
   check("FAQ 펼침", await b.js("document.querySelector('details').open"));
   await b.go("/nope/");
   check("없는 주소 → 404 안내", await b.js("document.body.innerText.includes('찾으시는 페이지가 없습니다')"));
-  for (const [url, status] of [["/", 200], ["/beans/", 200], ["/beans/socorro/", 200], ["/wholesale/", 200], ["/beans/none/", 404]]) check(`${url} → ${status}`, (await fetch(BASE + url)).status === status);
+  for (const [url, status] of [["/", 200], ["/beans/", 200], ["/beans/socorro/", 200], ["/wholesale/", 200], ["/checkout/", 200], ["/checkout/success/", 200], ["/checkout/fail/", 200], ["/account/", 200], ["/admin/", 200], ["/beans/none/", 404]]) check(`${url} → ${status}`, (await fetch(BASE + url)).status === status);
   await b.close();
+
+  // ── 로그인·주문·관리자 (로그아웃 상태)
+  const a = await openPage(375);
+  await a.js("localStorage.setItem('lowwave-cart', JSON.stringify([{ slug: 'aricha', grams: 200, grind: 'whole', plan: 'once', qty: 1 }]))");
+  await a.go("/checkout/"); await sleep(1000);
+  check("주문서: 로그인 전이면 로그인 안내", await a.js("document.querySelector('h1')?.textContent.includes('로그인해 주세요')"));
+  await a.js(fill("input[name=email]", "nope")); await a.js(fill("input[name=password]", "123456")); await a.js(click("form button[type=submit]")); await sleep(150);
+  check("로그인: 잘못된 이메일 → 오류 (서버 요청 없이)", await a.js("document.querySelector('[role=alert]').textContent.includes('이메일 형식')"));
+  await a.js(click("button[role=tab]", "회원가입")); await sleep(100);
+  check("회원가입 탭 → 이름 칸", await a.js("!!document.querySelector('input[name=name]')"));
+  await a.js(click("form button[type=submit]")); await sleep(150);
+  check("회원가입: 이름 없으면 오류", await a.js("document.querySelector('[role=alert]').textContent.includes('이름')"));
+  await a.go("/admin/"); await sleep(1000);
+  check("관리자: 로그인 전이면 관리자 로그인", await a.js("document.querySelector('h1')?.textContent.includes('관리자 로그인')"));
+  await a.go("/checkout/fail/?code=PAY_PROCESS_CANCELED&message=x&orderId=LW-20261028-AAAAAA"); await sleep(500);
+  check("결제창 취소 → 취소 안내", await a.js("document.querySelector('h1')?.textContent.includes('결제를 취소했습니다')"));
+  await a.go("/checkout/success/?paymentKey=x&orderId=LW-20261028-AAAAAA&amount=21000"); await sleep(1200);
+  check("승인 실패(서버 없음) → 오류 안내, 장바구니 유지", (await a.js("document.querySelector('h1')?.textContent.includes('완료하지 못했습니다')")) && (await a.js(COUNT)) === 1);
+  await a.js("localStorage.clear()");
+  await a.close();
 } finally {
   // /nope/ 는 일부러 연 404 페이지라 그 기록은 뺀다.
-  const real = problems.filter((m) => !m.includes("/nope/"));
+  // /api/confirm 은 정적 서버라 일부러 실패시킨 요청이고, Firestore 경고는 B2B 저장 요청을 막아서 생긴다.
+  const real = problems.filter((m) => !m.includes("/nope/") && !m.includes("/api/confirm") && !/Firestore|ERR_BLOCKED/i.test(m));
   check("콘솔 오류·경고 없음", real.length === 0, [...new Set(real)].slice(0, 5).join(" | "));
-  check("외부 요청 없음(글꼴·이미지 모두 자체 호스팅)", external.length === 0, [...new Set(external)].slice(0, 5).join(", "));
+  check("Firebase 말고 외부 요청 없음(글꼴·이미지 자체 호스팅)", external.length === 0, [...new Set(external)].slice(0, 5).join(", "));
   console.log(results.join("\n"));
   const failed = results.filter((r) => r.startsWith("FAIL")).length;
   console.log(`\n${results.length - failed}/${results.length} 통과`);

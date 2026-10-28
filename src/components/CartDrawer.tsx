@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { CheckCircle2, Minus, Plus, ShoppingBag, Trash2, X } from "lucide-react";
 import { getBean } from "@/data/beans";
 import { site, won } from "@/data/site";
@@ -13,7 +13,6 @@ import { useCart } from "./CartProvider";
 export default function CartDrawer() {
   const { items, update, remove, clear, open, setOpen, toast } = useCart();
   const ref = useRef<HTMLDialogElement>(null);
-  const [ordered, setOrdered] = useState(false);
   const t = totals(items);
 
   useEffect(() => {
@@ -23,10 +22,7 @@ export default function CartDrawer() {
     if (!open && d.open) d.close();
   }, [open]);
 
-  const close = () => {
-    setOpen(false);
-    setOrdered(false);
-  };
+  const close = () => setOpen(false);
 
   return (
     <>
@@ -113,17 +109,9 @@ export default function CartDrawer() {
                   </div>
                 </dl>
                 {t.shipping > 0 && <p className="text-body-sm text-secondary">{won(site.freeShipping - t.subtotal)} 더 담으면 무료배송입니다.</p>}
-                <div aria-live="polite">
-                  {ordered && (
-                    <p role="status" className="flex gap-2 rounded-lg bg-secondary-container/50 p-3 text-body-sm text-navy-ink">
-                      <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-cobalt-electric" aria-hidden="true" />
-                      포트폴리오용 데모 사이트라 실제 결제와 배송은 진행되지 않습니다. 담은 원두는 그대로 남아 있습니다.
-                    </p>
-                  )}
-                </div>
-                <button type="button" onClick={() => setOrdered(true)} className="flex min-h-12 w-full items-center justify-center rounded-lg bg-cobalt-electric text-body-lg font-semibold text-on-primary hover:bg-primary">
+                <Link href="/checkout/" onClick={close} className="flex min-h-12 w-full items-center justify-center rounded-lg bg-cobalt-electric text-body-lg font-semibold text-on-primary hover:bg-primary">
                   {won(t.total)} 주문하기
-                </button>
+                </Link>
                 <button type="button" onClick={clear} className="min-h-11 w-full text-body-sm text-secondary underline-offset-2 hover:underline">
                   장바구니 비우기
                 </button>

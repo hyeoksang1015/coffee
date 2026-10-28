@@ -45,7 +45,7 @@ export default function Footer() {
           </div>
           <span className="text-spec-num">© 2026 LOWWAVE COFFEE ATELIER.</span>
         </div>
-        <p className="mt-space-md text-body-sm text-on-surface-variant">이 사이트는 포트폴리오용 가상 브랜드입니다. 상품·후기·수치는 예시이며 실제 주문과 결제는 이루어지지 않습니다.</p>
+        <p className="mt-space-md text-body-sm text-on-surface-variant">이 사이트는 포트폴리오용 가상 브랜드입니다. 상품·후기·수치는 예시이며, 결제는 토스페이먼츠 테스트 모드라 실제로 돈이 빠져나가지 않고 배송되지 않습니다.</p>
       </div>
     </footer>
   );

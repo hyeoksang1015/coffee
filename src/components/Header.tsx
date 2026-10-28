@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Menu, ShoppingBag, X } from "lucide-react";
+import { Menu, ShoppingBag, UserRound, X } from "lucide-react";
 import { nav, site } from "@/data/site";
 import { totals } from "@/lib/cart";
 import { useCart } from "./CartProvider";
@@ -44,6 +44,9 @@ export default function Header() {
         <div className="flex items-center gap-space-sm">
           <Link href="/wholesale/#inquiry" className="hidden items-center rounded-lg bg-primary-container px-space-md py-space-xs text-label-caps uppercase tracking-wider text-on-primary transition-colors hover:bg-primary lg:inline-flex">
             B2B 샘플 신청
+          </Link>
+          <Link href="/account/" aria-label="내 주문 · 로그인" aria-current={active("/account") ? "page" : undefined} className="flex size-11 items-center justify-center text-on-surface-variant transition-colors hover:text-on-surface aria-[current=page]:text-primary">
+            <UserRound className="size-[22px]" aria-hidden="true" />
           </Link>
           <button type="button" onClick={() => setOpen(true)} aria-label={`장바구니 열기, ${count}개 담김`} className="relative flex size-11 items-center justify-center text-on-surface-variant transition-colors hover:text-on-surface">
             <ShoppingBag className="size-[22px]" aria-hidden="true" />

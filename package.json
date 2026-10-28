@@ -13,6 +13,8 @@
     "export:webmate": "node scripts/export-webmate.mjs"
   },
   "dependencies": {
+    "@tosspayments/tosspayments-sdk": "2.9.0",
+    "firebase": "13.1.0",
     "lucide-react": "^1.62.0",
     "next": "16.4.2",
     "pretendard": "^1.3.9",
@@ -24,6 +26,7 @@
     "@types/node": "^24.19.2",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "esbuild": "0.28.0",
     "eslint": "^9",
     "eslint-config-next": "16.4.2",
     "tailwindcss": "^4",
