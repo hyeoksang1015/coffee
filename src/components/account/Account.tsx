@@ -44,12 +44,18 @@ function MyOrders({ uid }: { uid: string }) {
   const [orders, setOrders] = useState<Order[] | null>(null);
   const [error, setError] = useState("");
 
-  // 복합 색인 없이 쓰려고 정렬은 받아 온 뒤 브라우저에서 한다.
+  // 복합 색인 없이 쓰려고 정렬은 받아 온 뒤 브라우저에서 한다. 결제를 끝내지 않은 시도는 주문으로 보여 주지 않는다.
   useEffect(
     () =>
       onSnapshot(
         query(collection(db(), "lwOrders"), where("uid", "==", uid)),
-        (s) => setOrders(s.docs.map(toOrder).sort((a, b) => (b.createdAt?.getTime() ?? 0) - (a.createdAt?.getTime() ?? 0))),
+        (s) =>
+          setOrders(
+            s.docs
+              .map(toOrder)
+              .filter((o) => o.payment)
+              .sort((a, b) => (b.createdAt?.getTime() ?? 0) - (a.createdAt?.getTime() ?? 0)),
+          ),
         (e) => setError(errorMessage(e)),
       ),
     [uid],

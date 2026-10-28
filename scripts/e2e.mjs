@@ -244,6 +244,7 @@ try {
 
   // ── 로그인·주문·관리자 (로그아웃 상태)
   const a = await openPage(375);
+  await a.go("/");
   await a.js("localStorage.setItem('lowwave-cart', JSON.stringify([{ slug: 'aricha', grams: 200, grind: 'whole', plan: 'once', qty: 1 }]))");
   await a.go("/checkout/"); await sleep(1000);
   check("주문서: 로그인 전이면 로그인 안내", await a.js("document.querySelector('h1')?.textContent.includes('로그인해 주세요')"));

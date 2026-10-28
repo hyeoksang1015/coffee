@@ -81,7 +81,6 @@ export function OrderCard({ order }: { order: Order }) {
           {order.tracking.carrier} 송장번호 <strong className="tabular-nums">{order.tracking.number}</strong>
         </p>
       )}
-      {order.status === "pending" && <p className="text-body-sm text-secondary">결제가 끝나지 않은 주문입니다. 결제창을 닫았다면 장바구니에서 다시 주문해 주세요.</p>}
       {order.cancel && <p className="text-body-sm text-error">취소 사유: {order.cancel.reason}</p>}
       <details className="group">
         <summary className="flex min-h-11 cursor-pointer items-center text-body-sm font-semibold text-cobalt-electric">주문 상품 · 배송지 보기</summary>
